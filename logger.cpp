@@ -1,7 +1,7 @@
 #include "logger.h"
 #include <QTime>
 
-Logger::Logger(EMessageType msgType, const char* functionName, std::string a...)
+Logger::Logger(EMessageType msgType, const char* fileName, const char* functionName, const int line, std::string a...)
 {
     QString s;
     switch(msgType)
@@ -25,26 +25,8 @@ Logger::Logger(EMessageType msgType, const char* functionName, std::string a...)
     }
 
     QTime curTime = QTime::currentTime();
-    s += curTime.toString() + "." + QString::number(curTime.msec()) + ": " + QString(functionName) + " <<< " + QString::fromStdString(a);
+    s += curTime.toString() + "." + QString::number(curTime.msec()) + " " + QString(fileName) + " <<< " + QString(functionName) + ":" + QString::number(line) + " ### " + QString::fromStdString(a);
     s += "\e[0m";
 
-    switch(msgType)
-    {
-        case EMessageType::INFO:
-            qInfo(s.toStdString().c_str());
-            break;
-        case EMessageType::DEBUG:
-            qDebug(s.toStdString().c_str());
-            break;
-
-        case EMessageType::WARNING:
-            qWarning(s.toStdString().c_str());
-            break;
-        case EMessageType::CRITICAL:
-            qCritical(s.toStdString().c_str());
-            break;
-        case EMessageType::FATAL:
-            qFatal(s.toStdString().c_str());
-            break;
-    }
+    qDebug(s.toStdString().c_str());
 }

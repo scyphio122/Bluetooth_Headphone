@@ -14,7 +14,7 @@ public:
         FATAL
     };
 
-    Logger(EMessageType msgType, const char* functionName, std::__cxx11::string a...);
+    Logger(EMessageType msgType, const char *fileName, const char* functionName, const int line, std::__cxx11::string a...);
 };
 
 #define LOG_DBG(a...)           LOG(Logger::EMessageType::DEBUG, a)
@@ -23,6 +23,6 @@ public:
 #define LOG_CRITICAL(a...)      LOG(Logger::EMessageType::CRITICAL, a)
 #define LOG_FATAL(a...)         LOG(Logger::EMessageType::FATAL, a)
 
-#define LOG(msgType, a,...)  Logger(msgType, __FUNCTION__, a)
+#define LOG(msgType, a,...)  Logger(msgType, __FILE__, __FUNCTION__, __LINE__, a)
 
 #endif // LOGGER_H
