@@ -38,8 +38,6 @@
 
 int main(int argc, char *argv[])
 {
-    Logger::Init();
-
     QCoreApplication a(argc, argv);
     CBluetoothScanner::GetInstance();
 
