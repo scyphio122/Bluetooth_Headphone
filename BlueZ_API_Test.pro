@@ -9,9 +9,14 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
+INCLUDEPATH +=  "/usr/include/"
+
+LIBS += -lbluetooth
+
 SOURCES += main.cpp \
     bluetoothscanner.cpp \
-    logger.cpp
+    logger.cpp \
+    bluetoothdevice.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -26,4 +31,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     bluetoothscanner.h \
-    logger.h
+    logger.h \
+    bluetoothdevice.h

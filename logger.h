@@ -5,9 +5,24 @@
 class Logger
 {
 public:
-    Logger(const char* functionName, std::__cxx11::string a...);
+    enum class EMessageType: uint8_t
+    {
+        DEBUG,
+        INFO,
+        WARNING,
+        CRITICAL,
+        FATAL
+    };
+
+    Logger(EMessageType msgType, const char* functionName, std::__cxx11::string a...);
 };
 
-#define LOG(a,...)  Logger(__FUNCTION__, a)
+#define LOG_DBG(a...)           LOG(Logger::EMessageType::DEBUG, a)
+#define LOG_INFO(a...)          LOG(Logger::EMessageType::INFO, a)
+#define LOG_WARNING(a...)       LOG(Logger::EMessageType::WARNING, a)
+#define LOG_CRITICAL(a...)      LOG(Logger::EMessageType::CRITICAL, a)
+#define LOG_FATAL(a...)         LOG(Logger::EMessageType::FATAL, a)
+
+#define LOG(msgType, a,...)  Logger(msgType, __FUNCTION__, a)
 
 #endif // LOGGER_H

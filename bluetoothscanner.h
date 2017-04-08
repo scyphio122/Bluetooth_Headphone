@@ -3,7 +3,10 @@
 
 #include <QObject>
 #include <QList>
-
+#include <sys/socket.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/hci.h>
+#include <bluetooth/hci_lib.h>
 
 class CBluetoothScanner : public QObject
 {
@@ -24,6 +27,11 @@ public slots:
 private:
     explicit CBluetoothScanner(QObject *parent = 0);
 
+    void m_openLocalAdapter();
+
+    int m_localAdapterDevId;
+
+    int m_localAdapterSocket;
 };
 
 #endif // BLUETOOTHSCANNER_H
