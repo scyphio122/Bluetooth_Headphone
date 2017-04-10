@@ -4,7 +4,7 @@
 
 CBluetoothDevice::CBluetoothDevice(bdaddr_t* macAddr, const char *devName, uint8_t devClass[3])
 {
-    memcpy(macAddr, &m_macAddress, sizeof(bdaddr_t));
+    memcpy(&m_macAddress, macAddr, sizeof(bdaddr_t));
     if(devName != nullptr)
         m_devName = std::string(devName);
 

@@ -41,9 +41,9 @@ private:
     QList<CBluetoothDevice> m_devicesList;
 
     /// The value in seconds will be calculated as scan_timeout_s = M_SCAN_TIMEOUT_TICS * 1.28
-    const int M_SCAN_TIMEOUT_TICKS = 8;
+    const int M_SCAN_TIMEOUT_TICKS = 16;
 
-    const int M_SCAN_DEV_NAME_TIMEOUT_MS = 100;
+    const int M_SCAN_DEV_NAME_TIMEOUT_MS = 1000;
 
     const int M_SCAN_DEV_NAME_BUFFER_SIZE = 15;
 
@@ -53,7 +53,7 @@ private:
 
     inquiry_info* m_inquiryInfo;
 
-    const int m_maxScannedDevicesNumber = 10;
+    const int m_maxScannedDevicesNumber = 255;
 
     char m_devicesFoundCnt;
 

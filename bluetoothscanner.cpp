@@ -64,27 +64,30 @@ bool CBluetoothScanner::StartScanning()
     }
 
     /// Create list which will hold the scanned blutooth devices
-    m_inquiryInfo = (inquiry_info*)malloc(m_maxScannedDevicesNumber * sizeof(inquiry_info));
+    m_inquiryInfo = new inquiry_info[m_maxScannedDevicesNumber];
+    memset(m_inquiryInfo, 0, m_maxScannedDevicesNumber * sizeof(inquiry_info));
     if(m_inquiryInfo == nullptr)
     {
         LOG_CRITICAL("CANNOT ALLOCATE MEMORY FOR INQUIRY DATA");
+        return false;
     }
 
 
-    LOG_INFO("Scan has started, SCAN_TIMEOUT: %f, MAX DISCOVERED DEVICES NUMBER: %d", M_SCAN_TIMEOUT_TICKS*1.28f, m_maxScannedDevicesNumber);
+    LOG_INFO("Scan has started, m_localAdapterDevId:%d, SCAN_TIMEOUT: %f, MAX DISCOVERED DEVICES NUMBER: %d",m_localAdapterDevId, M_SCAN_TIMEOUT_TICKS*1.28f, m_maxScannedDevicesNumber);
     m_devicesList.clear();
     /// Start scan
     m_devicesFoundCnt = hci_inquiry(m_localAdapterDevId, M_SCAN_TIMEOUT_TICKS, m_maxScannedDevicesNumber, NULL, &m_inquiryInfo, IREQ_CACHE_FLUSH);
 
-    if(m_devicesFoundCnt == -1)
+    if(m_devicesFoundCnt < 0)
     {
         LOG_CRITICAL("Error during scanning");
+        LOG_ERRNO();
         return false;
     }
 
     LOG_DBG("Scan finished. Found: %d devices", m_devicesFoundCnt);
-
-    emit nearbyDevicesFound();
+    m_onNearbyDevicesFound();
+    //emit nearbyDevicesFound();
     return true;
 }
 
@@ -101,10 +104,12 @@ void CBluetoothScanner::m_onNearbyDevicesFound()
         CBluetoothDevice dev(&(m_inquiryInfo[i].bdaddr));
         dev.SetDeviceClass(m_inquiryInfo[i].dev_class);
 
-        retval = hci_read_remote_name(m_localAdapterSocket, &(m_inquiryInfo[i].bdaddr), sizeof(name),  name, M_SCAN_DEV_NAME_TIMEOUT_MS);
+        retval = hci_read_remote_name(m_localAdapterSocket, &(m_inquiryInfo+i)->bdaddr, M_SCAN_DEV_NAME_BUFFER_SIZE,  name, 5000);
         if(retval == -1)
         {
             LOG_CRITICAL("Could not get the device name of MAC: %s. Ignoring it...", dev.GetMacString().c_str());
+            LOG_DBG("ERRNO: %d", errno);
+            LOG_ERRNO();
             continue;
         }
 
