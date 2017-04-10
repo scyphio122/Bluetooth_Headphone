@@ -16,7 +16,8 @@ LIBS += -lbluetooth
 SOURCES += main.cpp \
     bluetoothscanner.cpp \
     logger.cpp \
-    bluetoothdevice.cpp
+    bluetoothdevice.cpp \
+    mutex.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -32,4 +33,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     bluetoothscanner.h \
     logger.h \
-    bluetoothdevice.h
+    bluetoothdevice.h \
+    mutex.h
