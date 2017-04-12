@@ -9,15 +9,24 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH +=  "/usr/include/"
+INCLUDEPATH +=  "/usr/include/" \
+                "/usr/include/gstreamer-1.0/" \
+                "/usr/include/glib-2.0/" \
+                "/usr/include/glib-2.0/glib/" \
+                "/usr/lib/x86_64-linux-gnu/glib-2.0/include/" \
+                "/usr/lib/x86_64-linux-gnu/gstreamer-1.0/include/"
 
-LIBS += -lbluetooth
+LIBS += -lbluetooth \
+        -lgstreamer-1.0 \
+        -lgobject-2.0 \
+        -lglib-2.0
 
 SOURCES += main.cpp \
     bluetoothscanner.cpp \
     logger.cpp \
     bluetoothdevice.cpp \
-    mutex.cpp
+    mutex.cpp \
+    audioplayer.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -34,4 +43,5 @@ HEADERS += \
     bluetoothscanner.h \
     logger.h \
     bluetoothdevice.h \
-    mutex.h
+    mutex.h \
+    audioplayer.h
