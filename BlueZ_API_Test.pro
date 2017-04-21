@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     logger.cpp \
     bluetoothdevice.cpp \
     mutex.cpp \
-    audioplayer.cpp
+    audioplayer.cpp \
+    gstreameraudio.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -44,4 +45,5 @@ HEADERS += \
     logger.h \
     bluetoothdevice.h \
     mutex.h \
-    audioplayer.h
+    audioplayer.h \
+    gstreameraudio.h

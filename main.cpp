@@ -12,12 +12,15 @@ int main(int argc, char *argv[])
   GstElement *pipeline;
   GstBus *bus;
   GstMessage *msg;
+  GError* err;
+  gchar* txt;
+
 
   /* Initialize GStreamer */
   gst_init (&argc, &argv);
 
   /* Build the pipeline */
-  pipeline = gst_parse_launch ("playbin uri=https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm", NULL);
+  pipeline = gst_parse_launch ("playbin location=/home/konrad/Dropbox/01_The_Trail.mp3", NULL);
 
   /* Start playing */
   gst_element_set_state (pipeline, GST_STATE_PLAYING);
@@ -28,7 +31,12 @@ int main(int argc, char *argv[])
 
   /* Free resources */
   if (msg != NULL)
+  {
+    gst_message_parse_error(msg, &err, &txt);
+    LOG_CRITICAL("GStreamer error. Error source: %s, Error message: %s", GST_OBJECT_NAME(msg->src), err->message);
     gst_message_unref (msg);
+  }
+
   gst_object_unref (bus);
   gst_element_set_state (pipeline, GST_STATE_NULL);
   gst_object_unref (pipeline);
