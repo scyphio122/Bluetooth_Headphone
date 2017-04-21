@@ -75,6 +75,7 @@ Logger::Logger(EMessageType msgType, const char* fileName, const char* functionN
             break;
         case EMessageType::FATAL:
             s = "\e[31mFatal: ";
+            abort();
             break;
     }
 

@@ -26,11 +26,11 @@ public:
 
     ~CGstreamerAudioDevice();
 
-    void SetAudioFileToPlayout(std::string fileName);
+    void SetAudioFileToPlayout(std::string filePath);
 
     void StartPlaying();
 
-    void StartPlaying(std::string fileName);
+    void StartPlaying(std::string filePath);
 
     void ParseMessage(GstMessage* msg);
 

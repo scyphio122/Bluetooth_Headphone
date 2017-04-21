@@ -46,7 +46,7 @@ CGstreamerAudioDevice* CGstreamerAudioDevice::GetInstance()
 
 void CGstreamerAudioDevice::SetAudioFileToPlayout(std::__cxx11::string filePath)
 {
-    LOG_DBG("Opening the file: %s", filePath);
+    LOG_DBG("Opening the file: %s", filePath.c_str());
 
     if(!m_pSource)
     {
@@ -91,11 +91,11 @@ GstElement* CGstreamerAudioDevice::AddPipelineElementInOrder(const char* elemFac
         GstElement* prevElem = m_pipelineElementList[m_pipelineElementList.size()-1];
         gchar* prevName = gst_element_get_name(prevElem);
 
-        LOG_DBG("Linking previus element: %s to current one: %s", prevName, elemName);
+        LOG_DBG("Linking previus element: \'%s\' to current one: \'%s\'", prevName, elemName);
 
         if(!gst_element_link(prevElem, elem))
         {
-            LOG_CRITICAL("Error while linking elements!!! Source: %s, Destination: %s", prevName, elemName);
+            LOG_CRITICAL("Error while linking elements!!! Source: \'%s\', Destination: \'%s\'", prevName, elemName);
             g_free(prevName);
             return nullptr;
         }
@@ -109,7 +109,7 @@ GstElement* CGstreamerAudioDevice::AddPipelineElementInOrder(const char* elemFac
 
 void CGstreamerAudioDevice::StartPlaying()
 {
-    LOG_DBG("Current state: %s", s_statesNames[m_currentState]);
+    LOG_DBG("Current state: %s", s_statesNames[m_currentState].c_str());
 
     if( m_currentState == PlayerState::E_STOPPED ||
         m_currentState == PlayerState::E_PAUSED)
@@ -131,9 +131,9 @@ void CGstreamerAudioDevice::StartPlaying()
     return;
 }
 
-void CGstreamerAudioDevice::StartPlaying(std::__cxx11::string fileName)
+void CGstreamerAudioDevice::StartPlaying(std::__cxx11::string filePath)
 {
-    SetAudioFileToPlayout(fileName);
+    SetAudioFileToPlayout(filePath);
 
     StartPlaying();
 }
@@ -198,12 +198,13 @@ bool CGstreamerAudioDevice::m_CreatePipeline()
 
     m_pSource = AddPipelineElementInOrder("filesrc", "Audio source");
     m_pMp3Decoder = AddPipelineElementInOrder("mad", "MP3 decoder");
-    m_pAudioConverter = AddPipelineElementInOrder("audioconverter", "Audio converter");
+    m_pAudioConverter = AddPipelineElementInOrder("audioconvert", "Audio converter");
     m_pSink = AddPipelineElementInOrder("alsasink" , "Audio sink");
 
     if(!(m_pSource && m_pMp3Decoder && m_pAudioConverter && m_pSink))
     {
         m_ClearPipeline();
+        LOG_FATAL("Aborting - could not create pipeline");
         return false;
     }
 
