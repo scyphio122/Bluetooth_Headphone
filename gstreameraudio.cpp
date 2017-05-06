@@ -64,6 +64,7 @@ void CGstreamerAudioDevice::SetAudioFileToPlayout(std::__cxx11::string filePath)
 
 GstElement* CGstreamerAudioDevice::AddPipelineElementInOrder(const char* elemFactoryName, const char* elemName)
 {
+    LOG_DBG("Object name: \'%s\', object type: \'%s\'", elemName, elemFactoryName);
     if(!m_pPipeline)
     {
         LOG_FATAL("Pipeline not created!!! Pipeline: %p", m_pPipeline);
@@ -154,7 +155,7 @@ void CGstreamerAudioDevice::ParseMessage(GstMessage *msg)
         GError* e;
         gchar* debug_info;
         gst_message_parse_error(msg, &e, &debug_info);
-        LOG_CRITICAL("Error received during playout of: %s. ERROR MESSAGE: \n%s", GST_ELEMENT_NAME(msg->src), e->message );
+        LOG_CRITICAL("Error received during playout of: %s. \nERROR MESSAGE: %s", GST_ELEMENT_NAME(msg->src), e->message );
         if(debug_info)
         {
             LOG_DBG("Additional debug info: %s", debug_info);
@@ -197,7 +198,7 @@ bool CGstreamerAudioDevice::m_CreatePipeline()
     }
 
     m_pSource = AddPipelineElementInOrder("filesrc", "Audio source");
-    m_pMp3Decoder = AddPipelineElementInOrder("mad", "MP3 decoder");
+    m_pMp3Decoder = AddPipelineElementInOrder("mpg123audiodec", "MP3 decoder");
     m_pAudioConverter = AddPipelineElementInOrder("audioconvert", "Audio converter");
     m_pSink = AddPipelineElementInOrder("alsasink" , "Audio sink");
 
